@@ -28,7 +28,9 @@ jobs:
 
       - name: Terraform Plan
         working-directory: terraform
-        run: terraform plan
+        run: terraform plan -input=false
+        env:
+          TF_VAR_origin_verify_secret: ${{ secrets.ORIGIN_VERIFY_SECRET }}
 
   apply:
     needs: plan
@@ -50,6 +52,6 @@ jobs:
 
       - name: Terraform Apply
         working-directory: terraform
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -input=false
         env:
           TF_VAR_origin_verify_secret: ${{ secrets.ORIGIN_VERIFY_SECRET }}
