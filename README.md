@@ -6,7 +6,7 @@ Cloud Daisy's personal portfolio site, hosted on AWS, secured by Cloudflare, and
 
 ## Overview
 
-This repo contains a static portfolio website and the infrastructure-as-code used to deploy it. The site is served from Amazon S3 through CloudFront, with Cloudflare sitting in front as the DNS provider and edge security layer (replacing AWS WAF to keep costs down). Deployments are managed through Terraform and automated with GitHub Actions.
+This repo contains a static portfolio website and the infrastructure-as-code used to deploy it. The site is served from Amazon S3 through CloudFront, with Cloudflare sitting in front as the DNS provider and edge security layer (replacing AWS WAF to keep costs down). Deployments are managed through Terraform and automated with GitHub Actions. Initial deployment was done through Terraform, run locally. GitHub Actions was set up afterward to automate subsequent deployments.
 
 ## Architecture
 
@@ -34,7 +34,7 @@ Amazon S3 (private bucket, Origin Access Control only)
 
 - **Hosting:** Amazon S3 (static site) + Amazon CloudFront (CDN)
 - **TLS:** AWS Certificate Manager, validated via Cloudflare DNS
-- **DNS & edge security:** Cloudflare (proxied DNS, WAF, bot protection, rate limiting)
+- **DNS & edge security:** Cloudflare (proxied DNS, Managed Ruleset (free tier), bot protection, rate limiting)
 - **Origin protection:** CloudFront Function + Cloudflare Transform Rule (shared-secret header)
 - **Infrastructure as code:** Terraform (S3 backend for state)
 - **CI/CD:** GitHub Actions, authenticated to AWS via OIDC (no long-lived AWS keys)
@@ -73,7 +73,7 @@ Terraform state is stored remotely in a dedicated S3 bucket, with state locking 
 
 Since this project skips AWS WAF to save cost, protection is layered instead:
 
-- **Cloudflare** sits in front of everything (proxied DNS), providing a managed WAF ruleset, bot protection, and a per-IP rate limit — all on the Free plan
+- **Cloudflare** sits in front of everything (proxied DNS), providing a free managed WAF ruleset, bot protection, and a custom per-IP rate limit all on the Free plan
 - **Origin-verify header:** Cloudflare attaches a secret header to every request it forwards; a CloudFront Function checks for it and returns 403 to anything that skips Cloudflare and hits the CloudFront domain directly
 - **S3** is private and only reachable through CloudFront via Origin Access Control
 
