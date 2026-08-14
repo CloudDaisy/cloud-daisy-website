@@ -17,4 +17,21 @@ document.addEventListener('DOMContentLoaded', function () {
   } else {
     revealEls.forEach(function (el) { el.classList.add('in-view'); });
   }
+  var navToggle = document.getElementById('navToggle');
+  var navEl = document.querySelector('.nav');
+  var navLinksEl = document.querySelector('.nav-links');
+  if (navToggle && navEl && navLinksEl) {
+    navToggle.addEventListener('click', function () {
+      var isOpen = navEl.classList.toggle('menu-open');
+      navLinksEl.classList.toggle('mobile-open');
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    navLinksEl.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        navEl.classList.remove('menu-open');
+        navLinksEl.classList.remove('mobile-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
 });
