@@ -63,7 +63,7 @@ Amazon S3 (private bucket, Origin Access Control only)
 Provisioned via Terraform in the `terraform/` directory:
 
 - Private S3 bucket for the site, with public access blocked
-- CloudFront distribution with Origin Access Control (OAC) — S3 is never exposed directly
+- CloudFront distribution with Origin Access Control (OAC); S3 is never exposed directly
 - ACM certificate for `cloud-daisy.com` and `www.cloud-daisy.com`, DNS-validated
 - CloudFront Function that checks every request for a secret `X-Origin-Verify` header, rejecting anything that didn't come through Cloudflare
 
@@ -79,18 +79,18 @@ Since this project skips AWS WAF to save cost, protection is layered instead:
 
 ## CI/CD
 
-Deployments run through GitHub Actions (`.github/workflows/deploy.yml`), authenticated to AWS using OpenID Connect — no AWS access keys are stored in GitHub.
+Deployments run through GitHub Actions (`.github/workflows/deploy.yml`), authenticated to AWS using OpenID Connect; no AWS access keys are stored in GitHub.
 
 - **On push to `main`:** the `plan` job runs automatically, showing what Terraform would change
 - **Manual trigger (`workflow_dispatch`):** runs `plan` followed by `apply`, deploying the change
 
 To deploy a change:
-1. Push code to `main` (this runs `plan` automatically — review the output in the Actions tab)
+1. Push code to `main` (this runs `plan` automatically, then review the output in the Actions tab)
 2. Go to **Actions → Deploy Cloud Daisy → Run workflow** to trigger `apply`
 
 ## Local development
 
-Site files are plain HTML/CSS/JS — open `index.html` directly, or serve the folder with any static file server.
+Site files are plain HTML/CSS/JS; open `index.html` directly, or serve the folder with any static file server.
 
 To work with the infrastructure locally:
 
@@ -100,7 +100,7 @@ terraform init
 terraform plan
 ```
 
-A `terraform.tfvars` file with an `origin_verify_secret` value is required locally (not committed — see `.gitignore`). The same secret must also be set as the `ORIGIN_VERIFY_SECRET` GitHub Actions secret, and configured as the header value in Cloudflare's origin-verify Transform Rule.
+A `terraform.tfvars` file with an `origin_verify_secret` value is required locally (not committed; see `.gitignore`). The same secret must also be set as the `ORIGIN_VERIFY_SECRET` GitHub Actions secret, and configured as the header value in Cloudflare's origin-verify Transform Rule.
 
 ## Notes
 
