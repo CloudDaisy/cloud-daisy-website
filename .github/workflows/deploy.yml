@@ -55,3 +55,6 @@ jobs:
         run: terraform apply -auto-approve -input=false
         env:
           TF_VAR_origin_verify_secret: ${{ secrets.ORIGIN_VERIFY_SECRET }}
+
+      - name: Invalidate CloudFront Cache
+        run: aws cloudfront create-invalidation --distribution-id E3N25O4X75RS7J --paths "/*"
