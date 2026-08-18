@@ -56,5 +56,8 @@ jobs:
         env:
           TF_VAR_origin_verify_secret: ${{ secrets.ORIGIN_VERIFY_SECRET }}
 
+      - name: Sync site files to S3
+        run: aws s3 sync . s3://cloud-daisy-website-prod --delete --exclude "terraform/*" --exclude ".git/*" --exclude ".github/*"
+
       - name: Invalidate CloudFront Cache
         run: aws cloudfront create-invalidation --distribution-id E3N25O4X75RS7J --paths "/*"
